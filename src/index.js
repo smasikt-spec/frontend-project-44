@@ -1,25 +1,27 @@
 import readlineSync from 'readline-sync'
 
-export const runEvenGame = () => {
+const ROUNDS_LIMIT = 3
+
+const runGame = (taskDescription, getLevelData) => {
   console.log('Welcome to the Brain Games!')
-  const name = readlineSync.question('May I have your name? ')
-  console.log(`Hello, ${name}!`)
-  console.log('Answer "yes" if the number is even, otherwise answer "no".')
+  const userName = readlineSync.question('May I have your name? ')
+  console.log(`Hello, ${userName}!`)
+  console.log(taskDescription)
 
-  for (let i = 0; i < 3; i += 1) {
-    const number = Math.floor(Math.random() * 100) + 1
-    console.log(`Question: ${number}`)
-    const userAnswer = readlineSync.question('Your answer: ')
-    const correctAnswer = number % 2 === 0 ? 'yes' : 'no'
+  for (let round = 0; round < ROUNDS_LIMIT; round += 1) {
+    const [question, rightAnswer] = getLevelData()
+    console.log(`Question: ${question}`)
+    const playerAnswer = readlineSync.question('Your answer: ')
 
-    if (userAnswer === correctAnswer) {
-      console.log('Correct!')
-    }
-    else {
-      console.log(`'${userAnswer}' is wrong answer ;(. Correct answer was '${correctAnswer}'.`)
-      console.log(`Let's try again, ${name}!`)
+    if (playerAnswer !== String(rightAnswer)) {
+      console.log(`'${playerAnswer}' is wrong answer ;(. Correct answer was '${rightAnswer}'.`)
+      console.log(`Let's try again, ${userName}!`)
       return
     }
+    console.log('Correct!')
   }
-  console.log(`Congratulations, ${name}!`)
+
+  console.log(`Congratulations, ${userName}!`)
 }
+
+export default runGame
